@@ -3,6 +3,6 @@ from django.contrib import admin
 # Register your models here.
 
 
-from .models import foodb
+from .models import FooDB
 
-admin.site.register(foodb)
+admin.site.register(FooDB)

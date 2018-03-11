@@ -3,7 +3,11 @@
 		<title>FoodAlloc</title>
 	</head>
 	<body>
+		<h1>FoodAlloc</h1>
+		<hr>
+		{% block content %}
 		<p><a href="{% url 'alloc' %}">Food Allocation</a>&emsp;&emsp;<a href="{% url 'lookup' %}">Food Lookup</a></p>
 		<p><a href="{% url 'prefer' %}">Set Preferences</a>&emsp;&emsp;<a href="{% url 'alter' %}">Set Alternatives</a></p>
+		{% endblock %}
 	</body>
 </html>

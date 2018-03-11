@@ -2,5 +2,9 @@
 
 {% block content %}
 <h3>Food Allocation</h3>
+<ul>
+	<li><a href = {% url 'food_details' %}>Physical Details</a></li>
+	<li><a href = {% url 'food_info' %}>Calories</a></li>
+</ul>
 <a href={% url 'home' %}>Home</a>
 {% endblock %}

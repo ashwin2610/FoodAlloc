@@ -2,5 +2,8 @@
 
 {% block content %}
 <h3>Food Lookup</h3>
+	<li><a href = {% url 'lookup_info' %}>Calorie Range</a></li>
+	<li><a href = {% url 'lookup_name' %}>Food Name</a></li>
+</ul>
 <a href={% url 'home' %}>Home</a>
 {% endblock %}

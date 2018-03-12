@@ -1,15 +1,12 @@
-<html>
-	<head>
-		<title>Enter Details</title>
-	</head>
-	<body>
+{% extends "home.html" %}
 
+{% block content %}
 		 <form name = "form" action="" method="POST">
 		        {% csrf_token %}
 		        <table>
 		        {{ form }}
 		        </table>
-		        <input type="submit" value="Submit" />
+		        <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i>
+  </button>
 		 </form>
-	</body>
-</html>
+{% endblock %}

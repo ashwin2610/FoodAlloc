@@ -2,22 +2,25 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from .forms import AllocateFoodWithPhysicalTraits, FoodInfo, LookupFoodWithFoodName
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-class HomePageView(TemplateView):
+
+class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = 'home.html'
 
-class FoodAllocView(TemplateView):
+class FoodAllocView(LoginRequiredMixin, TemplateView):
     template_name = 'alloc.html'
 
-class FoodLookupView(TemplateView):
+class FoodLookupView(LoginRequiredMixin, TemplateView):
     template_name = 'lookup.html'
 
-class SetPreferencesView(TemplateView):
+class SetPreferencesView(LoginRequiredMixin, TemplateView):
     template_name = 'prefer.html'
 
-class SetAlternativesView(TemplateView):
+class SetAlternativesView(LoginRequiredMixin, TemplateView):
     template_name = 'alter.html'
 
 def get_food_details(request):

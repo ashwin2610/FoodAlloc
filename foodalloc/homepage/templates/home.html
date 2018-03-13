@@ -11,24 +11,24 @@
 				<h1>FoodAlloc</h1>
 				<hr>
 				{% block content %}
-				<div class = "col s6"><a href="{% url 'alloc' %}" class="waves-effect waves-light btn">Food Allocation</a></div>
-				<div class = "col s6"><a href="{% url 'lookup' %}" class="waves-effect waves-light btn">Food Lookup</a></div><br>
-				<div class = "col s6"><a href="{% url 'prefer' %}" class="waves-effect waves-light btn">Set Preferences</a></div>
-				<div class = "col s6"><a href="{% url 'alter' %}" class="waves-effect waves-light btn">Set Alternatives</a></div>
+					<a href="{% url 'alloc' %}" class="waves-effect waves-light btn" style = "top:100px;left:25%">Food Allocation</a>
+					<a href="{% url 'lookup' %}" class="waves-effect waves-light btn" style = "top:100px;left:50%">Food Lookup</a><br>
+					<a href="{% url 'prefer' %}" class="waves-effect waves-light btn" style = "top:200px;left:25%">Set Preferences</a>
+					<a href="{% url 'alter' %}" class="waves-effect waves-light btn" style = "top:200px;left:50%">Set Alternatives</a>
 				{% endblock %}
 
 				{% block if_logged_in %}
-				<footer class = "page-footer">
-					<table>
-					{% if user.is_authenticated %}
-				     <tr>User: {{ user.get_username }}</tr>&emsp;
-				     <tr><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></tr>   
-				   {% else %}
-				     <tr><a href="{% url 'login'%}?next={{request.path}}">Login</a></tr>   
-				   {% endif %} 
-				</table>
+					<footer class = "page-footer">
+						<table>
+						{% if user.is_authenticated %}
+					     <tr>User: {{ user.get_username }}</tr>&emsp;
+					     <tr><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></tr>   
+					   {% else %}
+					     <tr><a href="{% url 'login'%}?next={{request.path}}">Login</a></tr>   
+					   {% endif %} 
+						</table>
+			        </footer>
 				{% endblock %}
-
-			</footer>
+			
 			</body>
 </html>

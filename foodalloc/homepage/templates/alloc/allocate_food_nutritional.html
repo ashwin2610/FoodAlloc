@@ -1,12 +1,29 @@
-{% extends "home.html" %}
+<html>
+	<head>
+		<base target="_parent">
+		<title>Enter Details</title>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+		<script src="{% static 'js/materialize.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+		<script src="{% static 'js/tabs.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/overlay.css' %}">
+		<script src="{% static 'js/overlay.js' %}"></script>
+	</head>
+	<body style = "background: transparent;">
 
-{% block content %}
 		 <form name = "form" action="" method="POST">
 		        {% csrf_token %}
 		        <table>
 		        {{ form }}
 		        </table>
 		        <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i>
-  </button>
+	 			</button>
 		 </form>
-{% endblock %}
+	</body>
+</html>
+
+
+
+

@@ -1,10 +1,24 @@
 {% extends "home.html" %}
 
 {% block content %}
-<h3>Food Allocation</h3>
-<ul>
+<!-- Tab links -->
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Physical_Details')" id="defaultOpen">Physical Details</button>
+  <button class="tablinks" onclick="openCity(event, 'Calorie_Range')">Calorie Range</button>
+</div>
+
+
+<!-- Tab content -->
+<div id="Physical_Details" class="tabcontent">
+  <iframe src="{% url 'food_details' %}" height="70%" width="100%" style="border: transparent;" allowTransparency="true"></iframe>
+</div>
+
+<div id="Calorie_Range" class="tabcontent">
+ <iframe src="{% url 'food_info' %}" height="70%" width="100%" style="border: transparent;" allowTransparency="true"></iframe>
+</div>
+
+<!-- <ul>
 	<li><a href = {% url 'food_details' %}>Physical Details</a></li>
 	<li><a href = {% url 'food_info' %}>Calories</a></li>
-</ul>
-<a href={% url 'home' %}>Home</a>
+</ul> -->
 {% endblock %}

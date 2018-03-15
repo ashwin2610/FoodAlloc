@@ -1,9 +1,19 @@
 {% extends "home.html" %}
 
 {% block content %}
-<h3>Food Lookup</h3>
-	<li><a href = {% url 'lookup_info' %}>Calorie Range</a></li>
-	<li><a href = {% url 'lookup_name' %}>Food Name</a></li>
-</ul>
-<a href={% url 'home' %}>Home</a>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Calorie_Range')">Calorie Range</button>
+  <button class="tablinks" onclick="openCity(event, 'Food_Name')">Food Name</button>
+</div>
+
+<!-- Tab content -->
+<div id="Calorie_Range" class="tabcontent">
+  <iframe src="{% url 'lookup_info' %}" height="70%" width="100%" style="border: none;"></iframe>
+</div>
+
+<div id="Food_Name" class="tabcontent">
+ <iframe src="{% url 'lookup_name' %}" height="70%" width="100%" style="border: none;"></iframe>
+</div>
+
 {% endblock %}

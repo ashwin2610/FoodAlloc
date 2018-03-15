@@ -7,6 +7,7 @@ class AllocateFoodWithPhysicalTraits(forms.Form):
     height = forms.IntegerField(help_text="Enter height in centimetres")
     weight = forms.IntegerField(help_text="Enter weight in kilograms")
     age = forms.IntegerField(help_text="Enter age")
+    gender = forms.ChoiceField(choices=[('Male','Male'),('Female','Female')], help_text="Enter gender")
 
     # def clean_food_alloc_data(self):
     #     height_cleaned = self.cleaned_data['height']

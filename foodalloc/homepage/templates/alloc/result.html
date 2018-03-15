@@ -1,0 +1,8 @@
+{% extends "home.html" %}
+
+{% block content %}
+	{% for item in items %}
+		<p class = "card-panel">{{ item.food }} {{ item.food_type }} {{ item.calories }}</p>
+	{% endfor %}
+{% endblock %}
+

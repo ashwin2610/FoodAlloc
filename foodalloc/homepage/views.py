@@ -27,6 +27,21 @@ class SetAlternativesView(LoginRequiredMixin, TemplateView):
 def get_food_details(request):
 	if request.method == 'POST':
 		form = AllocateFoodWithPhysicalTraits(request.POST)
+		
+		if form.is_valid():
+			height, weight, age, gender = form.clean_food_alloc_data()
+
+		if gender == 'M':	
+			bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+		else:
+			bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+
+		calories_required = bmr *1.55
+
+		print (bmr)
+		allocate(calories_required)
+
+
 		# Have to do something here
 	else:
 		form = AllocateFoodWithPhysicalTraits()
@@ -57,3 +72,9 @@ def get_food_name(request):
 	else:
 		form = LookupFoodWithFoodName()
 		return render(request, 'alloc/allocate_food_physical.html', {'form': form})
+
+
+
+
+def allocate(calories):
+	pass #define function here function here

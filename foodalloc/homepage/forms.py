@@ -7,15 +7,23 @@ class AllocateFoodWithPhysicalTraits(forms.Form):
     height = forms.IntegerField(help_text="Enter height in centimetres")
     weight = forms.IntegerField(help_text="Enter weight in kilograms")
     age = forms.IntegerField(help_text="Enter age")
-    gender = forms.ChoiceField(choices=[('Male','Male'),('Female','Female')], help_text="Enter gender")
 
-    # def clean_food_alloc_data(self):
-    #     height_cleaned = self.cleaned_data['height']
-    #     weight_cleaned = self.cleaned_data['weight']
-    #     age_cleaned = self.cleaned_data['age']
+    
+    gender_choices=[('M','Male'), ('F','Female')]
+
+    gender = forms.ChoiceField(help_text="Select gender", choices=gender_choices, widget=forms.RadioSelect)
+
+    def clean_food_alloc_data(self):
+        height_cleaned = self.cleaned_data['height']
+        weight_cleaned = self.cleaned_data['weight']
+        age_cleaned = self.cleaned_data['age']
+        gender_cleaned = self.cleaned_data['gender']
+
+
         
-    #     # Remember to always return the cleaned data.
-    #     return data
+        # Remember to always return the cleaned data.
+        return height_cleaned, weight_cleaned, age_cleaned, gender_cleaned
+
 
 
 class FoodInfo(forms.Form):

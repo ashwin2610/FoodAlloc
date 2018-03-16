@@ -1,0 +1,32 @@
+{% extends "home.html" %}
+
+
+{% block content %}
+	<h4 style = "color:white;"> Suggested items for breakfast </h4>
+	{% for item in breakfast %}
+		<p class = "card-panel">
+		{% for details in item %}
+			{{ details }} &emsp;
+		{% endfor %}
+		</p>
+	{% endfor %}
+
+	<h4 style = "color:white; padding:20px;"> Suggested items for lunch </h4>
+	{% for item in lunch %}
+		<p class = "card-panel">
+		{% for details in item %}
+			{{ details }}
+		{% endfor %}
+		</p>
+	{% endfor %}
+
+
+	<h4 style = "color:white; padding: 20px;"> Suggested items for dinner </h4>
+	{% for item in dinner %}
+		<p class = "card-panel">
+		{% for details in item %}
+			{{ details }}
+		{% endfor %}
+		</p>
+	{% endfor %}
+{% endblock %}

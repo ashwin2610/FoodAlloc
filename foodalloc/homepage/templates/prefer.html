@@ -1,5 +1,11 @@
 {% extends "home.html" %}
 
 {% block content %}
-<h3>Set Preferences</h3>
+	 <form name = "form" action="" method="POST">
+	        {% csrf_token %}
+	        <table>
+	        {{ form }}
+	        </table>
+	        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="alertBox()">Submit<i class="material-icons right">send</i></button>
+	 </form>
 {% endblock %}

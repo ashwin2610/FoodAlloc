@@ -9,16 +9,22 @@ from django.db import models
 
 
 class FooDB(models.Model):
-    food_id = models.IntegerField(db_column='Id', blank=True, null=False, primary_key=True)  # Field name made lowercase.
-    food = models.TextField(db_column='Food', blank=True, null=True)  # Field name made lowercase.
-    food_type = models.TextField(db_column='Type', blank=True, null=True)  # Field name made lowercase.
-    calories = models.IntegerField(db_column='Calories', blank=True, null=True)  # Field name made lowercase.
+    food_id = models.IntegerField(db_column='Id', blank=True, null=False, primary_key=True)
+    food = models.TextField(db_column='Food', blank=True, null=True)
+    food_type = models.TextField(db_column='Type', blank=True, null=True)
+    calories = models.IntegerField(db_column='Calories', blank=True, null=True)
+    preferences = models.TextField(db_column='Preferences', blank=True, null=True)
+    alternatives = models.TextField(db_column='Alternatives', blank=True, null=True)
 
     class Meta:
-        managed = True
-        db_table = 'Sheet1'
+        managed = False
+        db_table = 'First Sheet'
 
     def __str__(self):
     	return self.food
+
+
+
+
 
 

@@ -20,8 +20,26 @@ class FoodAllocView(LoginRequiredMixin, TemplateView):
 class FoodLookupView(LoginRequiredMixin, TemplateView):
     template_name = 'lookup.html'
 
-class SetPreferencesView(LoginRequiredMixin, TemplateView):
-    template_name = 'prefer.html'
+@login_required
+def set_preferences(request):
+    if request.method == 'POST':
+        form = LookupFoodWithFoodName(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            items = FooDB.objects.filter(food__iexact=name)
+
+            for item in items:
+                if item.preferences == '0':
+                    item.preferences = request.user.username
+
+                else:
+                    item.preferences = item.preferences + ', ' + request.user.username
+                item.save()
+        return HttpResponseRedirect('')
+    else:
+        form = LookupFoodWithFoodName()
+        return render(request, 'prefer.html', {'form': form})
+
 
 class SetAlternativesView(LoginRequiredMixin, TemplateView):
     template_name = 'alter.html'
@@ -51,7 +69,7 @@ def get_food_details(request):
 def get_food_range(request):
     if request.method == 'POST':
         form = FoodInfo(request.POST)
-		# Have to do something here
+	
         if form.is_valid():
             upper_bound = form.cleaned_data['upper_bound']
             lower_bound = form.cleaned_data['lower_bound']
@@ -67,7 +85,7 @@ def get_food_range(request):
 def get_food_info(request):
 	if request.method == 'POST':
 		form = FoodInfo(request.POST)
-		# Have to do something here
+	
 		if form.is_valid():
 			upper_bound = form.cleaned_data['upper_bound']
 			lower_bound = form.cleaned_data['lower_bound']
@@ -80,7 +98,7 @@ def get_food_info(request):
 def get_food_name(request):
 	if request.method == 'POST':
 		form = LookupFoodWithFoodName(request.POST)
-		# Have to do something here
+	
 		if form.is_valid():
 			name = form.cleaned_data['name']
 			items = FooDB.objects.filter(food__iexact=name)
@@ -89,7 +107,6 @@ def get_food_name(request):
 	else:
 		form = LookupFoodWithFoodName()
 		return render(request, 'alloc/allocate_food_physical.html', {'form': form})
-
 
 
 

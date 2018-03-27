@@ -58,7 +58,7 @@ def get_food_details(request):
 
 		calories_required = bmr *1.55
 
-		breakfast, lunch, dinner = allocate(calories_required)
+		breakfast, lunch, dinner = allocate(request, calories_required)
 
 		return render(request, 'alloc/allocated_food.html', {'breakfast': breakfast, 'lunch': lunch, 'dinner': dinner})
 	else:
@@ -73,7 +73,7 @@ def get_food_range(request):
         if form.is_valid():
             upper_bound = form.cleaned_data['upper_bound']
             lower_bound = form.cleaned_data['lower_bound']
-            breakfast, lunch, dinner = allocate(randint(lower_bound, upper_bound))
+            breakfast, lunch, dinner = allocate(request, randint(lower_bound, upper_bound))
 
             return render(request, 'alloc/allocated_food.html', {'breakfast': breakfast, 'lunch': lunch, 'dinner': dinner})
 
@@ -111,9 +111,15 @@ def get_food_name(request):
 
 
 
-def allocate(calories):
-    type1 = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).order_by('?')
-    type2 = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).order_by('?')
+def allocate(request, calories):
+    type1 = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).exclude(preferences__iexact = request.user.username).order_by('?')
+    type2 = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).exclude(preferences__iexact = request.user.username).order_by('?')
+
+    type1_pref = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).filter(preferences__iexact = request.user.username)
+    type2_pref = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).filter(preferences__iexact = request.user.username)
+    
+    pref1_len = len(type1_pref)
+    pref2_len = len(type2_pref)
 
     breakfast = []
     lunch = []
@@ -124,19 +130,53 @@ def allocate(calories):
     dinner_items = [0, 0, 0, 0, 0]
 
 
-    for i in range(3):
-        breakfast.append(type1[randint(0, len(type1)-1)])
-        breakfast_items[i] = [breakfast[i].food]
-        breakfast_items[i].append(("("+breakfast[i].food_type+")"))
+    if pref1_len <= 3:
+        for i in range(pref1_len):
+            breakfast.append(type1_pref[i])
+            breakfast_items[i] = [breakfast[i].food]
+            breakfast_items[i].append(("("+breakfast[i].food_type+")"))
 
-    for i in range(5):
-        lunch.append(type2[randint(0, len(type2)-1)])
-        lunch_items[i] = [lunch[i].food]
-        lunch_items[i].append(("("+lunch[i].food_type+")"))
+        for i in range(3 - pref1_len):
+            breakfast.append(type1[randint(0, len(type1)-1)])
+            breakfast_items[pref1_len+i] = [breakfast[pref1_len+i].food]
+            breakfast_items[pref1_len+i].append(("("+breakfast[pref1_len+i].food_type+")"))
 
-        dinner.append(type2[randint(0, len(type2)-1)])
-        dinner_items[i] = [dinner[i].food]
-        dinner_items[i].append(("("+dinner[i].food_type+")"))
+    else:
+        for i in range(3):
+            breakfast.append(type1_pref[randint(0, pref1_len-1)])
+            breakfast_items[i] = [breakfast[i].food]
+            breakfast_items[i].append(("("+breakfast[i].food_type+")"))
+
+
+    if pref2_len <= 5:
+        for i in range(pref2_len):
+            lunch.append(type2_pref[i])
+            lunch_items[i] = [lunch[i].food]
+            lunch_items[i].append(("("+lunch[i].food_type+")"))
+
+            dinner.append(type2_pref[i])
+            dinner_items[i] = [dinner[i].food]
+            dinner_items[i].append(("("+dinner[i].food_type+")"))
+
+        for i in range(5 - pref2_len):
+            lunch.append(type2[randint(0, len(type2)-1)])
+            lunch_items[pref2_len+i] = [lunch[pref2_len+i].food]
+            lunch_items[pref2_len+i].append(("("+lunch[pref2_len+i].food_type+")"))
+
+            dinner.append(type2[randint(0, len(type2)-1)])
+            dinner_items[pref2_len+i] = [dinner[pref2_len+i].food]
+            dinner_items[pref2_len+i].append(("("+dinner[pref2_len+i].food_type+")"))
+
+    else:
+        for i in range(5):
+            lunch.append(type2_pref[randint(0, pref2_len-1)])
+            lunch_items[i] = [lunch[i].food]
+            lunch_items[i].append(("("+lunch[i].food_type+")"))
+
+            dinner.append(type2_pref[randint(0, pref2_len-1)])
+            dinner_items[i] = [dinner[i].food]
+            dinner_items[i].append(("("+dinner[i].food_type+")"))
+
 
 
     for i in range(3):

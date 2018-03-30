@@ -26,7 +26,7 @@ def set_preferences(request):
         form = LookupFoodWithFoodName(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
-            items = FooDB.objects.filter(food__iexact=name)
+            items = FooDB.objects.filter(food__icontain=name)
 
             for item in items:
                 if item.preferences == '0':
@@ -41,8 +41,27 @@ def set_preferences(request):
         return render(request, 'prefer.html', {'form': form})
 
 
-class SetAlternativesView(LoginRequiredMixin, TemplateView):
-    template_name = 'alter.html'
+
+@login_required
+def set_alternatives(request):
+    if request.method == 'POST':
+        form = LookupFoodWithFoodName(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            items = FooDB.objects.filter(food__icontain=name)
+
+            for item in items:
+                if item.alternatives == '0':
+                    item.alternatives = request.user.username
+
+                else:
+                    item.alternatives = item.alternatives + ', ' + request.user.username
+                item.save()
+        return HttpResponseRedirect('')
+    else:
+        form = LookupFoodWithFoodName()
+        return render(request, 'alter.html', {'form': form})
+
 
 def get_food_details(request):
 	if request.method == 'POST':
@@ -69,7 +88,7 @@ def get_food_details(request):
 def get_food_range(request):
     if request.method == 'POST':
         form = FoodInfo(request.POST)
-	
+
         if form.is_valid():
             upper_bound = form.cleaned_data['upper_bound']
             lower_bound = form.cleaned_data['lower_bound']
@@ -85,7 +104,7 @@ def get_food_range(request):
 def get_food_info(request):
 	if request.method == 'POST':
 		form = FoodInfo(request.POST)
-	
+
 		if form.is_valid():
 			upper_bound = form.cleaned_data['upper_bound']
 			lower_bound = form.cleaned_data['lower_bound']
@@ -98,7 +117,7 @@ def get_food_info(request):
 def get_food_name(request):
 	if request.method == 'POST':
 		form = LookupFoodWithFoodName(request.POST)
-	
+
 		if form.is_valid():
 			name = form.cleaned_data['name']
 			items = FooDB.objects.filter(food__iexact=name)
@@ -112,12 +131,12 @@ def get_food_name(request):
 
 
 def allocate(request, calories):
-    type1 = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).exclude(preferences__iexact = request.user.username).order_by('?')
-    type2 = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).exclude(preferences__iexact = request.user.username).order_by('?')
+    type1 = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).exclude(preferences__iexact = request.user.username).exclude(alternatives__iexact = request.user.username).order_by('?')
+    type2 = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).exclude(preferences__iexact = request.user.username).exclude(alternatives__iexact = request.user.username).order_by('?')
 
     type1_pref = (FooDB.objects.filter(food_type = 'Fruit') | FooDB.objects.filter(food_type = 'Nut')).filter(preferences__iexact = request.user.username)
     type2_pref = (FooDB.objects.filter(food_type = 'Vegetable') | FooDB.objects.filter(food_type = 'Meat') | FooDB.objects.filter(food_type = 'Legumes')).filter(preferences__iexact = request.user.username)
-    
+
 
     breakfast = []
     lunch = []
@@ -151,7 +170,7 @@ def allocate(request, calories):
         lunch_items[i] = [lunch[i].food]
         lunch_items[i].append(("("+lunch[i].food_type+")"))
 
-        
+
         if len(type2_pref) == 0:
             dinner.append(type2[randint(0, len(type2)-1)])
         else:

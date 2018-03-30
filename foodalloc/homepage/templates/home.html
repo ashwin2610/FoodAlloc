@@ -27,9 +27,9 @@
 
 		</style>
 		<script>
-			function alertBox() 
+			function alertBox(option)
 			{
-				var msg = "Successfully set as preference!"
+				var msg = "Successfully set as " + option
     			alert(msg);
 			}
 		</script>
@@ -53,8 +53,8 @@
 							<span onclick="openNav()">About</span>
 						</div>
 					</h5>
-				{% endblock %}	
-				
+				{% endblock %}
+
 				{% block content %}
 				<div class="container" id = "cont">
 					<a href="{% url 'alloc' %}" class="waves-effect waves-light btn" style = "top:100px;left:20%;">Food Allocation</a>
@@ -63,14 +63,14 @@
 					<a href="{% url 'alter' %}" class="waves-effect waves-light btn" style = "top:200px;left:30%;">Set Alternatives</a>
 				</div>
 				{% endblock %}
-			
+
 				{% block if_logged_in %}
 					<div class="footer" id="footer">
 						{% if user.is_authenticated %}
 					     User: {{ user.get_username }}&emsp;
 					     <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>&emsp;
 					   {% else %}
-					     <a href="{% url 'login'%}?next={{request.path}}">Login</a>&emsp;  
+					     <a href="{% url 'login'%}?next={{request.path}}">Login</a>&emsp;
 					   {% endif %}
 					</div>
 				{% endblock %}

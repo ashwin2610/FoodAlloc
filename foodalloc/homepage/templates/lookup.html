@@ -3,17 +3,20 @@
 {% block content %}
 
 <div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'Calorie_Range')">Calorie Range</button>
+  <button class="tablinks" onclick="openCity(event, 'Calorie_Range')" id="defaultOpen">Calorie Range</button>
   <button class="tablinks" onclick="openCity(event, 'Food_Name')">Food Name</button>
 </div>
 
 <!-- Tab content -->
 <div id="Calorie_Range" class="tabcontent">
-  <iframe src="{% url 'lookup_info' %}" height="70%" width="100%" style="border: none;"></iframe>
+  <iframe src="{% url 'lookup_info' %}" style="border: transparent; height:500px; width:100%;"></iframe>
 </div>
 
 <div id="Food_Name" class="tabcontent">
- <iframe src="{% url 'lookup_name' %}" height="70%" width="100%" style="border: none;"></iframe>
+ <iframe src="{% url 'lookup_name' %}" style="border: transparent; height:500px; width:100%;"></iframe>
 </div>
 
+<script type="text/javascript">
+	document.getElementById("defaultOpen").click();
+</script>
 {% endblock %}

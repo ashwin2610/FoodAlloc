@@ -4,7 +4,7 @@
 {% block content %}
 	<h4 style = "color:white;"> Suggested items for breakfast </h4>
 	{% for item in breakfast %}
-		<p class = "card-panel">
+		<p class = "card-panel" style="color: black;">
 		{% for details in item %}
 			{{ details }} &emsp;
 		{% endfor %}
@@ -13,7 +13,7 @@
 
 	<h4 style = "color:white; padding:20px;"> Suggested items for lunch </h4>
 	{% for item in lunch %}
-		<p class = "card-panel">
+		<p class = "card-panel" style="color: black;">
 		{% for details in item %}
 			{{ details }}
 		{% endfor %}
@@ -23,7 +23,7 @@
 
 	<h4 style = "color:white; padding: 20px;"> Suggested items for dinner </h4>
 	{% for item in dinner %}
-		<p class = "card-panel">
+		<p class = "card-panel" style="color: black;">
 		{% for details in item %}
 			{{ details }}
 		{% endfor %}

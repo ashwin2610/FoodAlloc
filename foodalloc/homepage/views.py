@@ -26,16 +26,29 @@ def set_preferences(request):
         form = LookupFoodWithFoodName(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
-            items = FooDB.objects.filter(food__icontain=name)
+            items = FooDB.objects.filter(food__icontains=name)
+            user_name = request.user.username
 
-            for item in items:
-                if item.preferences == '0':
-                    item.preferences = request.user.username
+            if "set" in request.POST:
+                for item in items:
+                    if item.preferences == '0':
+                        item.preferences = user_name
 
-                else:
-                    item.preferences = item.preferences + ', ' + request.user.username
-                item.save()
-        return HttpResponseRedirect('')
+                    else:
+                        item.preferences = item.preferences + ', ' + user_name
+                    item.save()
+
+            elif "remove" in request.POST:
+                for item in items:
+                    if ',' in item.preferences:
+                        if user_name in item.preferences:
+                            item.preferences = item.preferences.replace(user_name + ', ', '')
+                    else:
+                        if user_name in item.preferences:
+                            item.preferences = item.preferences.replace(user_name, '0')
+                    item.save()
+
+        return HttpResponseRedirect('/prefer')
     else:
         form = LookupFoodWithFoodName()
         return render(request, 'prefer.html', {'form': form})
@@ -48,41 +61,54 @@ def set_alternatives(request):
         form = LookupFoodWithFoodName(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
-            items = FooDB.objects.filter(food__icontain=name)
+            items = FooDB.objects.filter(food__icontains=name)
+            user_name = request.user.username
 
-            for item in items:
-                if item.alternatives == '0':
-                    item.alternatives = request.user.username
+            
+            if "set" in request.POST:
+                for item in items:
+                    if item.alternatives == '0':
+                        item.alternatives = user_name
 
-                else:
-                    item.alternatives = item.alternatives + ', ' + request.user.username
-                item.save()
-        return HttpResponseRedirect('')
+                    else:
+                        item.alternatives = item.alternatives + ', ' + user_name
+                    item.save()
+
+            elif "remove" in request.POST:
+                for item in items:
+                    if ',' in item.alternatives:
+                        if user_name in item.alternatives:
+                            item.alternatives = item.alternatives.replace(user_name + ', ', '')
+                    else:
+                        if user_name in item.alternatives:
+                            item.alternatives = item.alternatives.replace(user_name, '0')
+                    item.save()
+        return HttpResponseRedirect('/alter')
     else:
         form = LookupFoodWithFoodName()
         return render(request, 'alter.html', {'form': form})
 
 
 def get_food_details(request):
-	if request.method == 'POST':
-		form = AllocateFoodWithPhysicalTraits(request.POST)
+    if request.method == 'POST':
+        form = AllocateFoodWithPhysicalTraits(request.POST)
 
-		if form.is_valid():
-			height, weight, age, gender = form.clean_food_alloc_data()
+        if form.is_valid():
+            height, weight, age, gender = form.clean_food_alloc_data()
 
-		if gender == 'M':
-			bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
-		else:
-			bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+        if gender == 'M':
+            bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+        else:
+            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
 
-		calories_required = bmr *1.55
+        calories_required = bmr *1.55
 
-		breakfast, lunch, dinner = allocate(request, calories_required)
+        breakfast, lunch, dinner = allocate(request, calories_required)
 
-		return render(request, 'alloc/allocated_food.html', {'breakfast': breakfast, 'lunch': lunch, 'dinner': dinner})
-	else:
-		form = AllocateFoodWithPhysicalTraits()
-		return render(request, 'alloc/allocate_food_physical.html', {'form': form})
+        return render(request, 'alloc/allocated_food.html', {'breakfast': breakfast, 'lunch': lunch, 'dinner': dinner})
+    else:
+        form = AllocateFoodWithPhysicalTraits()
+        return render(request, 'alloc/allocate_food_physical.html', {'form': form})
 
 
 def get_food_range(request):
@@ -102,30 +128,30 @@ def get_food_range(request):
 
 
 def get_food_info(request):
-	if request.method == 'POST':
-		form = FoodInfo(request.POST)
+    if request.method == 'POST':
+        form = FoodInfo(request.POST)
 
-		if form.is_valid():
-			upper_bound = form.cleaned_data['upper_bound']
-			lower_bound = form.cleaned_data['lower_bound']
-			items = FooDB.objects.filter(calories__lte=upper_bound).filter(calories__gte=lower_bound).order_by('calories')
-			return render(request, 'alloc/result.html', {'items': items})
-	else:
-		form = FoodInfo()
-		return render(request, 'alloc/allocate_food_physical.html', {'form': form})
+        if form.is_valid():
+            upper_bound = form.cleaned_data['upper_bound']
+            lower_bound = form.cleaned_data['lower_bound']
+            items = FooDB.objects.filter(calories__lte=upper_bound).filter(calories__gte=lower_bound).order_by('calories')
+            return render(request, 'alloc/result.html', {'items': items})
+    else:
+        form = FoodInfo()
+        return render(request, 'alloc/allocate_food_physical.html', {'form': form})
 
 def get_food_name(request):
-	if request.method == 'POST':
-		form = LookupFoodWithFoodName(request.POST)
+    if request.method == 'POST':
+        form = LookupFoodWithFoodName(request.POST)
 
-		if form.is_valid():
-			name = form.cleaned_data['name']
-			items = FooDB.objects.filter(food__iexact=name)
-			return render(request, 'alloc/result.html', {'items': items})
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            items = FooDB.objects.filter(food__iexact=name)
+            return render(request, 'alloc/result.html', {'items': items})
 
-	else:
-		form = LookupFoodWithFoodName()
-		return render(request, 'alloc/allocate_food_physical.html', {'form': form})
+    else:
+        form = LookupFoodWithFoodName()
+        return render(request, 'alloc/allocate_food_physical.html', {'form': form})
 
 
 

@@ -10,15 +10,14 @@
 
 <!-- Tab content -->
 <div id="Physical_Details" class="tabcontent">
-  <iframe src="{% url 'food_details' %}"  style="border: transparent; height:427px; width:100%;" allowTransparency="true"></iframe>
+  <iframe src="{% url 'food_details' %}"  style="border: transparent; height:500px; width:100%;" allowTransparency="true"></iframe>
 </div>
 
 <div id="Calorie_Range" class="tabcontent">
- <iframe src="{% url 'food_info' %}"  style="border: transparent; height:427px; width:100%;" allowTransparency="true"></iframe>
+ <iframe src="{% url 'food_info' %}"  style="border: transparent; height:500px; width:100%;" allowTransparency="true"></iframe>
 </div>
 
-<!-- <ul>
-	<li><a href = {% url 'food_details' %}>Physical Details</a></li>
-	<li><a href = {% url 'food_info' %}>Calories</a></li>
-</ul> -->
+<script type="text/javascript">
+	document.getElementById("defaultOpen").click();
+</script>
 {% endblock %}

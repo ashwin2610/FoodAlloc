@@ -1,11 +1,27 @@
 {% extends "home.html" %}
 
 {% block content %}
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Add_Alternative')" id="defaultOpen" >Add Alternative</button>
+  <button class="tablinks" onclick="openCity(event, 'Remove_Alternative')">Remove Alternative</button>
+</div>
 	 <form name = "form" action="" method="POST">
 	        {% csrf_token %}
 	        <table>
 	        {{ form }}
 	        </table>
-	        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="alertBox('alternative!')">Submit<i class="material-icons right">send</i></button>
+
+
+			<div id="Add_Alternative" class="tabcontent">
+			  <button class="btn waves-effect waves-light" type="submit" name="set" onclick="alertBox('set as alternative!')">Set Alternative<i class="material-icons right">send</i></button>
+			</div>
+
+	        <div id="Remove_Alternative" class="tabcontent">
+			 <button class="btn waves-effect waves-light" type="submit" name="remove" onclick="alertBox('removed as alternative!')">Remove Alternative<i class="material-icons right">send</i></button>
+			</div>
+	        
 	 </form>
+<script type="text/javascript">
+	document.getElementById("defaultOpen").click();
+</script>
 {% endblock %}

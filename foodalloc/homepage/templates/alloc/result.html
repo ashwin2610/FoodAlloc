@@ -2,6 +2,6 @@
 
 {% block content %}
 	{% for item in items %}
-		<p class = "card-panel">{{ item.food }} {{ item.food_type }} {{ item.calories }}</p>
+		<p class = "card-panel" style="color: black;">{{ item.food }}  ({{ item.food_type }})  {{ item.calories }}cal/100g</p>
 	{% endfor %}
 {% endblock %}

@@ -1,11 +1,28 @@
 {% extends "home.html" %}
 
 {% block content %}
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Add_Preference')" id="defaultOpen" >Add Preference</button>
+  <button class="tablinks" onclick="openCity(event, 'Remove_Preference')">Remove Preference</button>
+</div>
 	 <form name = "form" action="" method="POST">
 	        {% csrf_token %}
 	        <table>
 	        {{ form }}
 	        </table>
-	        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="alertBox('preference!')">Submit<i class="material-icons right">send</i></button>
+	        
+	        
+
+			<div id="Add_Preference" class="tabcontent">
+			  <button class="btn waves-effect waves-light" type="submit" name="set" onclick="alertBox('set as preference!')">Set Preference<i class="material-icons right">send</i></button>
+			</div>
+
+			<div id="Remove_Preference" class="tabcontent">
+			 <button class="btn waves-effect waves-light" type="submit" name="remove" onclick="alertBox('removed as preference!')" >Remove Preference<i class="material-icons right">send</i></button>
+			</div>
 	 </form>
+
+<script type="text/javascript">
+	document.getElementById("defaultOpen").click();
+</script>
 {% endblock %}

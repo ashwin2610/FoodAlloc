@@ -4,4 +4,8 @@
 	{% for item in items %}
 		<p class = "card-panel" style="color: black;">{{ item.food }}  ({{ item.food_type }})  {{ item.calories }}cal/100g</p>
 	{% endfor %}
+
+	<script type="text/javascript">
+	    document.getElementById("about").style.display = "none";
+	</script>
 {% endblock %}

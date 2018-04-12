@@ -1,7 +1,11 @@
 {% extends "home.html" %}
 
 {% block content %}
-<p>Logged out!</p>  
+<p>Logged out!</p>
 
 <a href="{% url 'login'%}">Click here to login again.</a>
+
+<script type="text/javascript">
+    document.getElementById("about").style.display = "none";
+</script>
 {% endblock %}

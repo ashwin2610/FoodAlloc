@@ -26,7 +26,7 @@ def set_preferences(request):
         form = LookupFoodWithFoodName(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
-            items = FooDB.objects.filter(food__icontains=name)
+            items = FooDB.objects.filter(food__iexact=name)
             user_name = request.user.username
 
             if "set" in request.POST:
@@ -64,7 +64,7 @@ def set_alternatives(request):
             items = FooDB.objects.filter(food__icontains=name)
             user_name = request.user.username
 
-            
+
             if "set" in request.POST:
                 for item in items:
                     if item.alternatives == '0':
@@ -168,6 +168,8 @@ def allocate(request, calories):
     lunch = []
     dinner = []
 
+    low_calorie = ['Pepper', 'Lemon', 'Lime', 'Wasabi', 'Olives', 'Black Olives', 'Green Olives', 'Garlic', 'Tamarind']
+
     breakfast_items = [0, 0, 0]
     lunch_items = [0, 0, 0, 0, 0]
     dinner_items = [0, 0, 0, 0, 0]
@@ -210,14 +212,32 @@ def allocate(request, calories):
 
 
     for i in range(3):
-        quantity = (calories/9) * (100/breakfast[i].calories)
+        if breakfast[i].food in low_calorie:
+            quantity = 30
+        else:
+            quantity = (calories/9) * (100/breakfast[i].calories)
+
+        if quantity > 350:
+            quantity = 350
         breakfast_items[i].append((str(int(quantity))+"g"))
 
     for i in range(5):
-        quantity = (calories/15) * (100/lunch[i].calories)
+        if lunch[i].food in low_calorie:
+            quantity = 30
+        else:
+            quantity = (calories/15) * (100/lunch[i].calories)
+        if quantity > 350:
+            quantity = 350
         lunch_items[i].append((str(int(quantity))+"g"))
 
-        quantity = (calories/15) * (100/dinner[i].calories)
+
+        if dinner[i].food in low_calorie:
+            quantity = 30
+        else:
+            quantity = (calories/15) * (100/dinner[i].calories)
+
+        if quantity > 350:
+            quantity = 350
         dinner_items[i].append((str(int(quantity))+"g"))
 
     return breakfast_items, lunch_items, dinner_items
